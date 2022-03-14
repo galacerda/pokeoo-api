@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PokemonModule } from './features/pokemons/pokemon.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -11,5 +12,6 @@ import { ConfigModule } from '@nestjs/config';
     ScheduleModule.forRoot(),
     PokemonModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
