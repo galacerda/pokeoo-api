@@ -8,7 +8,7 @@ export class PokemonScheduler {
 
   constructor(private readonly pokemonService: PokemonService) {}
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_DAY_AT_3AM)
   async handleCron() {
     this.logger.log('Get pokemon of the day initialized');
 
