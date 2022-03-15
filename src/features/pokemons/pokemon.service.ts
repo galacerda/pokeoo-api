@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Pokemon, PokemonDocument } from './pokemon.schema';
 import { CreatePokemonDto } from './pokemon.dto';
@@ -11,6 +11,7 @@ export class PokemonService {
   ) {}
 
   async createPokemons(createPokemonsDto: CreatePokemonDto[]) {
+    console.log(process.env.MONGODB_URI);
     const createPokemonsSerialized = createPokemonsDto.map(
       (createPokemon, index) => ({
         ...createPokemon,
@@ -23,6 +24,7 @@ export class PokemonService {
     const createdPokemons = await this.pokemonModel.insertMany(
       createPokemonsSerialized,
     );
+
     return createdPokemons;
   }
 
@@ -46,8 +48,13 @@ export class PokemonService {
   }
 
   async getPokemonsOfTheDay() {
-    const { name } = await this.pokemonModel.findOne({ isActual: true });
-
-    return name;
+    const pokemon = await this.pokemonModel.findOne({ isActual: true });
+    if (!pokemon) {
+      throw new NotFoundException({
+        field: 'pokemon',
+        error: 'not found',
+      });
+    }
+    return pokemon.name;
   }
 }
