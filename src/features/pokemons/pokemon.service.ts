@@ -3,11 +3,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Pokemon, PokemonDocument } from './pokemon.schema';
 import { CreatePokemonDto } from './pokemon.dto';
+import { Log, LogDocument } from './logs.schema';
 
 @Injectable()
 export class PokemonService {
   constructor(
     @InjectModel(Pokemon.name) private pokemonModel: Model<PokemonDocument>,
+    @InjectModel(Log.name) private logModel: Model<LogDocument>,
   ) {}
 
   async createPokemons(createPokemonsDto: CreatePokemonDto[]) {
@@ -39,6 +41,8 @@ export class PokemonService {
     const { order, name } = await this.getPokemonByOrder(randomOrder);
 
     await this.pokemonModel.updateOne({ order }, { isActual: true });
+    const createdLog = new this.logModel({ pokemon: name, date: new Date() });
+    createdLog.save();
 
     return name;
   }
