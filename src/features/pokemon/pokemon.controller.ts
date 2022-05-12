@@ -14,4 +14,9 @@ export class PokemonController {
   getPokemonOfTheDay() {
     return this.pokemonService.getPokemonsOfTheDay();
   }
+
+  @Get('/generate')
+  generatePokemon() {
+    return this.pokemonService.generatePokemonOfTheDay();
+  }
 }

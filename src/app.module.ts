@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { PokemonModule } from './features/pokemons/pokemon.module';
+import { PokemonModule } from './features/pokemon/pokemon.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import typeOrmConfig from './config/typeorm.config';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot(typeOrmConfig),
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGODB_URI),
     ScheduleModule.forRoot(),
     PokemonModule,
   ],
